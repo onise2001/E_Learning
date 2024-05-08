@@ -1,0 +1,23 @@
+{% extends "el_platform/index.html" %}
+
+
+{% block body %}
+
+{% for item in items %}
+<div class="card" style="width: 18rem; display:inline-block;">
+    <img src="https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{ item.name }}</h5>
+      <p class="card-text">{{ item.description }}</p>
+      <a href="/course/{{ item.id }}" class="btn btn-primary">See More</a>
+    </div>
+</div>
+
+{% endfor %}
+
+
+{% endblock body %}
+
+
+
+

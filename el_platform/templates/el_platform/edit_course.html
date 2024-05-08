@@ -1,0 +1,16 @@
+{% extends "el_platform/index.html" %}
+
+
+{% block body %}
+
+<h1>Edit:</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p}}
+    <input type="submit" value="Edit" class="btn btn-warning">
+</form>
+
+
+
+{% endblock body %}

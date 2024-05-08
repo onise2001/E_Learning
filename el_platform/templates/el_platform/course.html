@@ -1,0 +1,64 @@
+{% extends "el_platform/index.html" %}
+
+
+{% block body %}
+<img src="https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg" style="height: 250px; width: 250px;">
+
+{% if perms.el_platform.change_course %}
+    
+    <a href="/delete_course/{{ course.id }}"><button class="btn btn-danger">Delete</button></a>
+    {% if finished is not True%}
+    <a href="/edit_course/{{ course.id }}"><button class="btn btn-warning">Edit</button></a>
+    <a href="/finish_course/{{ course.id }}"><button class="btn btn-success">Finish</button></a>
+    {% else %}
+    <button class="btn btn-success">Already Finished</button>
+    {% endif %}
+    
+
+
+{% elif joined %}
+    
+    {% if finished is not True%}
+    <button class="btn btn-success">Already joined</button>
+    <a href="/finish_course/{{ course.id }}"><button class="btn btn-success">Finish</button></a>
+    {% else %}
+    <button class="btn btn-success">Already Finished</button>
+    {% endif %}
+
+{% else %}
+    <a href="/join_course/{{ course.id }}"><button class="btn btn-success">Join</button></a>
+
+{% endif %}
+
+<h1>{{ course.name }}</h1>
+<h2>Category: {{ course.category }}</h2>
+<p>Description: <br> {{ course.description }}</p>
+
+<h1>Stages:</h1>
+
+{% if perms.el_platform.change_stage and finished is not True%}
+<a href="/add_stage/{{ course.id }}"><button class="btn btn-success">Add Stage</button></a>
+{% endif %}
+
+{% for stage in stages%}
+<h1>{{ stage.title }}</h1>
+{% if perms.el_platform.change_stage and perms.el_platform.delete_stage%}
+<a href="/edit_stage/{{ stage.id }}"><button class="btn btn-warning">Edit</button></a>
+<a href="/delete_stage/{{ stage.id }}"><button class="btn btn-danger">Delete</button></a>
+
+
+{% endif %}
+
+<iframe src="{{ stage.video }}" ></iframe>
+
+<p>{{ stage.text }}</p>
+
+{% endfor %}
+
+
+
+{% endblock body %}
+
+
+
+

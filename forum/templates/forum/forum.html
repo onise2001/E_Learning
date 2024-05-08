@@ -1,0 +1,15 @@
+{% extends "el_platform/index.html" %}
+
+{% block body %}
+<h1>Forum:</h1>
+{% if user.is_authenticated %}
+<a href="add_post/"><button class="btn btn-success">Add Post</button></a>
+{% endif %}
+<ol>
+{% for post in posts %}
+<li><a href="see_post/{{ post.id }}">{{ post.title }}</a> Posted by: {{ post.user.username }}</li>
+{% endfor %}
+</ol>
+
+
+{% endblock %}

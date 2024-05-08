@@ -1,0 +1,18 @@
+{% extends "el_platform/index.html" %}
+
+
+
+{% block body %}
+
+<h1>Create Course:</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-success" value="Create course">
+</form>
+
+
+{% endblock body %}
+
+
+

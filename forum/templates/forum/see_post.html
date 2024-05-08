@@ -1,0 +1,34 @@
+{% extends "el_platform/index.html" %}
+
+
+{% block body %}
+
+{% if perms.forum.delete_post %}
+<a href="/forum/delete_post/{{ post.id }}"><button class="btn btn-danger">Delete</button></a>
+
+{% endif %}
+
+<h1>Posted by: {{ post.user.username }}</h1>
+
+<h4>{{ post.text }}</h4>
+
+
+
+<h1>Comments:</h1>
+<form action="/forum/add_comment/{{ post.id }}" method="post">
+    {% csrf_token %}
+    <label for="comment">Comment:</label>
+    {{ comment_form.as_p}}
+    <input type="submit" value="Add Comment">
+</form>
+
+{% for comment in comments %}
+<h4 style="margin-bottom: 10px;">Author: {{ comment.user.username }}</h4>
+<p style="margin-bottom:30px;">{{ comment.text }}</p>
+{% if perms.forum.delete_comment %}
+<a href="/forum/delete_comment/{{comment.id}}"><button class="btn btn-danger">Delete</button></a>
+{% endif %}
+
+{% endfor %}
+
+{% endblock %}
