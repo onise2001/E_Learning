@@ -4,19 +4,22 @@ from .forms import PostForm, CommentForm
 # Create your views here.
 
 def forum(request):
-    posts = Post.objects.all()
-    return render(request, "forum/forum.html", {"posts": posts})
+    if request.user.is_authenticated:
+        posts = Post.objects.all()
+        return render(request, "forum/forum.html", {"posts": posts})
+    return redirect("/auth/login")
 
 def see_post(request, id):
-    post = Post.objects.get(pk=id)
-    comments = Comment.objects.filter(post=post)
-    comment_form = CommentForm
-    return render(request, "forum/see_post.html", {"post": post, "comments": comments, "comment_form":comment_form})
+    if request.user.is_authenticated:
+        post = Post.objects.get(pk=id)
+        comments = Comment.objects.filter(post=post)
+        comment_form = CommentForm
+        return render(request, "forum/see_post.html", {"post": post, "comments": comments, "comment_form":comment_form})
+    return redirect("/auth/login")
     
 
 def add_post(request):
     if request.user.is_authenticated:
-
         if request.method == "POST":
             form = PostForm(request.POST)
             if form.is_valid():
@@ -26,6 +29,7 @@ def add_post(request):
     
         form = PostForm
         return render(request, "forum/add_post.html", {"form": form})
+    return redirect("/auth/login")
 
 # def edit_post(request, id):
 #     post = Post.objects.filter(pk=id)[0]
@@ -39,9 +43,11 @@ def add_post(request):
 
 
 def delete_post(request, id):
-    if request.user.has_perm("forum.delete_post"):
-        post = Post.objects.get(pk=id).delete()
-        return redirect("forum")
+    if request.user.is_authenticated:
+        if request.user.has_perm("forum.delete_post"):
+            post = Post.objects.get(pk=id).delete()
+            return redirect("forum")
+    return redirect("/auth/login")
 
 def add_comment(request, id):
     if request.user.is_authenticated:
@@ -55,12 +61,15 @@ def add_comment(request, id):
                 comment.save()
             
             return redirect("post", id=id)
+    return redirect("/auth/login")
 
 def delete_comment(request, id):
-    comment = Comment.objects.get(pk=id)
-    post = comment.post
-    comment.delete()
-    return redirect("post", id=post.id)
+    if request.user.is_authenticated:
+        comment = Comment.objects.get(pk=id)
+        post = comment.post
+        comment.delete()
+        return redirect("post", id=post.id)
+    return redirect("/auth/login")
 
 # def edit_comment(request, id):
 #     ...
